@@ -61,9 +61,15 @@ export default {
   },
   mounted(){
     var swiper = new Swiper('.swiper-container', {
-      pagination: {
-        el: '.swiper-pagination',
-      },
+        loop: true,
+        autoplay: {
+            delay: 3000,
+            disableOnInteraction: false,
+        },
+        pagination: {
+            el: '.swiper-pagination',
+            clickable: true
+        }
     });
   }
 }
