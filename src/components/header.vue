@@ -60,7 +60,6 @@ export default {
             })
           break;
         }
-        console.log(123)
       }
     }
   },
@@ -106,5 +105,32 @@ export default {
   }
   .huise{
     color: #ccc;
+  }
+
+  @media screen and (max-width: 768px) {
+    .nav {
+      display: block;
+      position: absolute;
+      z-index: 999;
+      background: #fff;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      margin-right: 0;
+    }
+    .nav li{
+      display: block;
+      margin: 0 14px;
+      cursor: pointer;
+    }
+    .header{
+      height: 48px;
+      line-height: 48px;
+    }
+    .logo{
+      height: 24px;
+      vertical-align: middle;
+    }
   }
 </style>

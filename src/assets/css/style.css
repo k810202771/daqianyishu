@@ -8,3 +8,10 @@
     height: 1px;
     background: #eee;
 }
+@media screen and (max-width: 768px) {
+    .box {
+      width: 100%;
+      padding: 0 12px;
+      box-sizing: border-box;
+    }
+}

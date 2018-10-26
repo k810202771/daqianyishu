@@ -11,14 +11,21 @@
     .swiper-pagination >>> .swiper-pagination-bullet-active{
         background: #fff;
     }
+
+    @media screen and (max-width: 768px) {
+        .swiper-container{
+            height: 180px;
+            min-width: auto;
+        }
+    }
 </style>
 
 <template>
   <div class="">
     <div class="swiper-container">
         <div class="swiper-wrapper">
-            <div style="background:url(http://pgq49ilm4.bkt.clouddn.com/banner2.jpg) center" class="banner swiper-slide" @click="topage(10)"></div>
-            <div style="background:url(http://pgq49ilm4.bkt.clouddn.com/banner1.jpg) center" class="banner swiper-slide" @click="topage(4)"></div>
+            <div style="background:url(http://pgq49ilm4.bkt.clouddn.com/banner2.jpg) center;background-size:auto 100%;" class="banner swiper-slide" @click="topage(10)"></div>
+            <div style="background:url(http://pgq49ilm4.bkt.clouddn.com/banner1.jpg) center;background-size:auto 100%;" class="banner swiper-slide" @click="topage(4)"></div>
         </div>
         <!-- Add Pagination -->
         <div class="swiper-pagination"></div>

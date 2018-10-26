@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import index from '@/components/pages/index'
 import exhibition from '@/components/pages/exhibition'
 import article from '@/components/pages/article'
+import admin from '@/components/pages/admin'
 
 Vue.use(Router)
 
@@ -22,6 +23,11 @@ export default new Router({
       path: '/article/:Id',
       name: 'article',
       component: article
+    },
+    {
+      path: '/admin',
+      name: 'admin',
+      component: admin
     }
   ]
 })

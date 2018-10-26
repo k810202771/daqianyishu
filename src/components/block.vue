@@ -7,6 +7,7 @@
         display: inline-block;
         width: 50%;
         cursor: pointer;
+        vertical-align: top;
     }
     .cover{
         width: 100%;

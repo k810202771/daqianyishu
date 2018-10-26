@@ -21,11 +21,17 @@
         font-size: 0;
     }
     .item-view{
+        overflow: hidden;
         display: inline-block;
         width: 50%;
         cursor: pointer;
     }
+    .item-view:hover .cover{
+        transform: scale3d(1.02,1.02,1);
+    }
     .cover{
+        transform: scale3d(1,1,1);
+        transition: transform .5s;
         width: 100%;
     }
     .item-title{
