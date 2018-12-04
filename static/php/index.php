@@ -1,4 +1,5 @@
 <?php 
+require_once './conn.php'; //加载数据库
 require_once './autoload.php';
 header('Access-Control-Allow-Origin:*');
  
@@ -32,4 +33,18 @@ function request_by_curl($remote_server,$post_string,$upToken) {
 $postdata = json_decode(file_get_contents('php://input'),true);
 $get = json_decode(request_by_curl('http://upload.qiniu.com/putb64/-1',$postdata['imgdata'],$upToken),true);
 
-echo '{"src":"http://ph34rw0qj.bkt.clouddn.com/'.$get['key'].'","key":"'.$get['key'].'"}';
+$sql = "SELECT * FROM `waitforupload` WHERE url='".$get['key']."'";
+$retval = mysqli_query( $conn, $sql );
+$row=mysqli_fetch_array($retval,MYSQLI_ASSOC);
+if(!$row){
+    $sql = "insert into `waitforupload`(url,number) values('".$get['key']."','0');";
+    $retval = mysqli_query( $conn, $sql );
+}
+
+//释放
+mysqli_free_result($row);
+mysqli_free_result($retval);
+//关闭连接
+mysqli_close($conn);
+
+echo '{"src":"http://daqianpic.image.designart.top/'.$get['key'].'","key":"'.$get['key'].'"}';

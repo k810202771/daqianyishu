@@ -22,19 +22,30 @@
         margin: 20px 0;
         color: #666;
     }
-    .box >>> .content{
+
+    .box >>> .text_center{
+        text-align: center;
+    }
+    .content >>> p{
         text-align: left;
         font-size: 16px;
         margin: 20px 0;
         color: #666;
     }
-    .box >>> .text_center{
-        text-align: center;
+    .content >>> img{
+        max-width: 100%;
+        height: auto !important;
     }
 </style>
 
 <template>
-  <div class="box" v-html="html">
+  <div class="box">
+      <div class="title">
+          {{title}} {{subtitle?'——':''}} {{subtitle}}
+      </div>
+      <div v-html="html" class="content">
+
+      </div>
   </div>
 </template>
 
@@ -44,12 +55,16 @@ export default {
   data () {
     return {
         html:'',
+        title:'',
+        subtitle:'',
         onload(){
-            this.$http.get('./static/ex(' + this.$route.params.Id + ').html').then((response) => {
-            // 处理HTML显示
-            this.html = response.data
+            this.$http.get('/list/getlist.php?list=*&id=' + this.$route.params.Id ).then((response) => {
+                // 处理HTML显示
+                this.html = response.data.list[0].content
+                this.title = response.data.list[0].title
+                this.subtitle = response.data.list[0].subtitle
             }).catch(() => {
-            this.html = '加载失败'
+                this.html = '加载失败'
             })
         }
     }

@@ -58,7 +58,7 @@
         font-size: 14px;
         padding: 20px;
     }
-    .items+.items{
+    .items + .items{
         border-top: 1px solid #eee;
     }
 </style>
@@ -86,6 +86,8 @@ export default {
   name: 'ue',
   data () {
     return {
+        ueready:false,
+        defaultMsg:'',
         show:false,
         downlist:[],
         filelist:[]
@@ -156,8 +158,24 @@ export default {
   destroyed() {
     this.editor.destroy();
   },
-  created(){
-        console.log(this);
+  watch:{
+      content(newValue){
+        newValue = newValue?newValue:'';
+        this.editor.addListener("ready", function () {
+            this.ueready = true;
+            this.editor.setContent(newValue); // 确保UE加载完成后，放入内容。
+        }.bind(this));
+        if(this.ueready == true && this.editor.getContent() != newValue){
+            this.editor.setContent(newValue);
+        }
+      }
+  },
+  computed:{
+    content(){
+        return this.$attrs.content
+    }
+  },
+  mounted(){
         const _this = this;
 
         UE.registerUI('upimg', function(editor, uiName) {
@@ -197,10 +215,15 @@ export default {
             //因为你是添加button,所以需要返回这个button
             return btn;
         });
+        
+        var that = this;
 
         this.editor = UE.getEditor("ueid", this.config); // 初始化UE
-        this.editor.addListener("ready", function () {
-            _this.editor.setContent(_this.defaultMsg); // 确保UE加载完成后，放入内容。
+        this.editor.addListener("contentChange", function () {
+            if(this.getContent() != ''){
+                that.$emit('textcontent', this.getContent())
+            }
+            
         });
   }
 }

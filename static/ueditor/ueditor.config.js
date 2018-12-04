@@ -33,7 +33,7 @@
         UEDITOR_HOME_URL: URL
 
         // 服务器统一请求接口路径
-        , serverUrl: URL + "php/controller.php"
+        //, serverUrl: URL + "php/controller.php"
 
         //工具栏上的所有的功能按钮和下拉框，可以在new编辑器的实例时选择自己需要的重新定义
         , 
@@ -139,12 +139,13 @@
                 //'scrawl', //涂鸦
                 //'music', //音乐
                 //'inserttable', //插入表格
-                'drafts', // 从草稿箱加载
+                //'drafts', // 从草稿箱加载
                 //'charts', // 图表
                 //'simpleupload', //单图上传
                 //'insertimage', //多图上传
             ]
         ]
+        
 
         //当鼠标放在工具栏上时显示的tooltip提示,留空支持自动多语言配置，否则以配置值为准
         //,labelMap:{
@@ -197,9 +198,9 @@
         //,autoClearEmptyNode : true //getContent时，是否删除空的inlineElement节点（包括嵌套的情况）
 
         //启用自动保存
-        //,enableAutoSave: true
+        ,enableAutoSave: false
         //自动保存间隔时间， 单位ms
-        //,saveInterval: 500
+        ,saveInterval: 0
 
         //,fullscreen : false //是否开启初始化时即全屏，默认关闭
 
@@ -525,7 +526,11 @@
 			tt:     [],
 			u:      [],
 			ul:     ['class', 'style'],
-			video:  ['autoplay', 'controls', 'loop', 'preload', 'src', 'height', 'width', 'class', 'style']
+            video:  ['autoplay', 'controls', 'loop', 'preload', 'src', 'height', 'width', 'class', 'style'],
+            source: ['src', 'type'],
+            embed: ['type', 'class', 'pluginspage', 'src', 'width', 'height', 'align', 'style', 'wmode', 'play',  
+                +  'autoplay','loop', 'menu', 'allowscriptaccess', 'allowfullscreen', 'controls', 'preload'],
+            iframe: ['src', 'class', 'height', 'width', 'max-width', 'max-height', 'align', 'frameborder', 'allowfullscreen']
 		}
     };
 

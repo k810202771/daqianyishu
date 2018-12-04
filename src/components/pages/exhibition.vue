@@ -43,7 +43,7 @@
 </style>
 <template>
   <div class="box">
-      <ul class="nav">
+      <ul class="nav" v-if="this.$route.params.type == 'now' || this.$route.params.type == 'soon' || this.$route.params.type == 'past'">
           <li>
               <router-link class="navsub" :style="'color:' + nav.now" :to="{name:'exhibition',params:{type:'now'}}">正在展出</router-link>
           </li>
@@ -54,16 +54,33 @@
               <router-link class="navsub" :style="'color:' + nav.past" :to="{name:'exhibition',params:{type:'past'}}">过往展出</router-link>
           </li>
       </ul>
+      <ul class="nav">
+          <li v-for="(item,index) in navlist" :key="index">
+              <router-link class="navsub" :style="navshow==index?'color:#000':''" :to='{name:"exhibition",params:{type:"{\"page\":\"" + navpage + "\",\"type\":\""+index+"\"}"}}'>{{item}}</router-link>
+          </li>
+      </ul>
       <div class="item-box">
         <div class="item-view" v-for="(item,index) in data" :key="index" @click="topage(item.id)">
             <div style="overflow:hidden;padding: 5px;">
                 <img class="cover" :src="item.cover">
                 <span class="item-title">
-                    {{item.title}}
+                    {{item.title}} {{item.subtitle?'——':''}} {{item.subtitle}}
                 </span>
             </div>
         </div>
       </div>
+
+    <div style="text-align:center;margin:10px;">
+        <el-pagination
+        background
+        layout="prev, pager, next"
+        :page-size='1'
+        @current-change="pagechange"
+        :current-page="pageidnex + 1"
+        :total="pagemax">
+        </el-pagination>
+    </div>
+
   </div>
 </template>
 
@@ -72,6 +89,14 @@ export default {
   name: '',
   data () {
     return {
+        pageidnex:0,
+        pagemax:0,
+        project:{name:'公共项目',titletype:{name:['公共艺术','公共活动','大千学'],list:['0']}},
+        record:{name:'记录',titletype:{name:['学术研究','视频'],list:['0']}},
+        pw:{name:'公益',titletype:{name:['幸福工程','未来项目'],list:['0']}},
+        navlist:null,
+        navpage:null,
+        navshow:[],
         nav:{
             now: "#999",
             soon: "#999",
@@ -88,26 +113,68 @@ export default {
             this.nav.soon = ""
             this.nav.past = ""
             switch(this.$route.params.type){
+                case 'now':
+                    this.navlist = null;
+                    this.$http.get('list/getlist.php?time=now&type=0&online=0&pageindex=' + this.pageidnex).then(function(res){
+                        this.data = res.data.list;
+                        this.pagemax = res.data.count;
+                        console.log(res);
+                    }.bind(this));
+                    this.nav.now = "#000";
+                break;
                 case "soon":
-                    this.data = [];
+                    this.navlist = null;
+                    this.$http.get('list/getlist.php?time=soon&type=0&online=0').then(function(res){
+                        this.data = res.data.list;
+                        this.pagemax = res.data.count;
+                        console.log(res);
+                    }.bind(this));
                     this.nav.soon = "#000"
                 break;
                 case "past":
-                    this.data = [
-                        {title:'女性力量：新维度——国际女性主义巡回展',cover:'http://pgq49ilm4.bkt.clouddn.com/zhan1-Cover.jpg',id:1},
-                        {title:'内观-全国优秀八零后中国画作品展',cover:'http://pgq49ilm4.bkt.clouddn.com/zhan2-Cover.jpg',id:2},
-                        {title:'在路上——中国青年艺术家巡展',cover:'http://pgq49ilm4.bkt.clouddn.com/zhan3-Cover.jpg',id:3},
-                        {title:'纸牌屋-黄勇色粉画展',cover:'http://pgq49ilm4.bkt.clouddn.com/zhan4-Cover.jpg',id:4},
-                        {title:'「迁想妙得」 ——“寻大国工匠精神 与经典面对面”',cover:'http://pgq49ilm4.bkt.clouddn.com/zhan5-Cover.jpg',id:5},
-                        {title:'陈岩和陈岩的朋友们文献展',cover:'http://pgq49ilm4.bkt.clouddn.com/zhan6-Cover.jpg',id:6}
-                    ]
+                    this.navlist = null;
+                    this.$http.get('list/getlist.php?time=past&type=0&online=0').then(function(res){
+                        this.data = res.data.list;
+                        this.pagemax = res.data.count;
+                        console.log(res);
+                    }.bind(this));
                     this.nav.past = "#000"
                 break;
                 default:
-                    this.data = [
-                        {title:'三千大千世界——大千画廊30周年特展',cover:'http://pgq49ilm4.bkt.clouddn.com/zhan7-Cover.jpg',id:10},
-                    ]
-                    this.nav.now = "#000";
+                    this.navlist = [];
+                    if(this.$route.params.type.indexOf('{') != -1){
+                        this.$route.params.type = JSON.parse(this.$route.params.type);
+                    }
+                    this.navpage = '' + (this.$route.params.type.page || this.$route.params.type);
+                    var type = '' + (this.$route.params.type.type || '0');
+                    if(this[this.navpage])this.navlist = this[this.navpage].titletype.name;
+                    switch(this.navpage){
+                        case 'project':
+                            this.$http.get('list/getlist.php?subtype='+type+'&type=2&online=0').then(function(res){
+                                this.data = res.data.list;
+                                this.pagemax = res.data.count;
+                                console.log(res);
+                            }.bind(this));
+                            this.navshow = type;
+                            console.log(this.navshow);
+                        break;
+                        case 'record':
+                            this.$http.get('list/getlist.php?subtype='+type+'&type=5&online=0').then(function(res){
+                                this.data = res.data.list;
+                                this.pagemax = res.data.count;
+                                console.log(res);
+                            }.bind(this));
+                            this.navshow = type;
+                        break;
+                        case 'pw':
+                            this.$http.get('list/getlist.php?subtype='+type+'&type=1&online=0').then(function(res){
+                                this.data = res.data.list;
+                                this.pagemax = res.data.count;
+                                console.log(res);
+                            }.bind(this));
+                            this.navshow = type;
+                        break;
+                    }
                 break;
             }
 
@@ -115,11 +182,19 @@ export default {
         }
     }
   },
+  methods:{
+    pagechange(e){
+        this.pageidnex = e - 1;
+        this.update();
+        console.log(this.pageidnex);
+    }
+  },
   created(){
       this.update();
   },
   watch: {
     "$route"(to,from){
+        this.pageidnex = 0;
         this.update();
     }
   }

@@ -4,6 +4,60 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <title>daqianyishu</title>
+    <style>
+      .el-button--primary {
+          color: #fff;
+          background-color: #e6a23c !important;
+          border-color: #e6a23c !important;
+      }
+      .el-button--primary:hover{
+        background-color: rgb(235,188,99) !important;
+        border-color: rgb(235,188,99) !important;
+      }
+      .el-input__inner:focus{
+        border:1px solid #e6a23c !important;
+      }
+      html,body{
+        margin:0;
+        height:100%;
+      }
+    </style>
+    <script>
+      window.types = [
+        {name:'展览',},
+        {name:'公益',titletype:{name:['幸福工程','未来项目'],list:['0']}},
+        {name:'公共项目',titletype:{name:['公共艺术','公共活动','大千学'],list:['0']}},
+        {name:'新闻'},
+        {name:'记录',titletype:{name:['学术研究','视频'],list:['0']}},
+        {name:'商店',cover:true}
+      ]
+      var cookie = {
+        set:function(name,value,expireHours){
+            var cookieString=name+"="+escape(value);
+             //判断是否设置过期时间
+             if(expireHours>0){
+                    var date=new Date();
+                    date.setTime(date.getTime+expireHours*3600*1000);
+                    cookieString=cookieString+"; expire="+date.toGMTString();
+             }
+             document.cookie=cookieString;
+        },
+        get:function(name){
+            var strCookie=document.cookie;
+             var arrCookie=strCookie.split("; ");
+             for(var i=0;i<arrCookie.length;i++){
+                   var arr=arrCookie[i].split("=");
+                   if(arr[0]==name)return arr[1];
+             }
+             return "";
+        },
+        delete:function(name){
+            var date=new Date();
+            date.setTime(date.getTime()-10000);
+            document.cookie=name+"=v; expire="+date.toGMTString();
+        }
+      }
+    </script>
   </head>
   <body>
     <div id="app"></div>

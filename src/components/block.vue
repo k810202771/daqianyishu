@@ -58,13 +58,13 @@
           <span class="more" v-if="$attrs.more!='null'">{{$attrs.more}}>></span>
       </div>
       <!--显示新闻-->
-      <div class="item-box" v-if="$attrs.type=='text'">
+      <div class="item-box" v-if="type=='text'">
           <ul class="text-view">
               <li @click="topage(item.id)" v-for="(item,index) in $attrs.data" :key="index">{{item.title}}</li>
           </ul>
       </div>
       <!--显示图片-->
-      <div class="item-box" v-if="$attrs.type=='img'">
+      <div class="item-box" v-if="type=='img'">
         <div class="item-view" v-for="(item,index) in $attrs.data" :key="index" @click="topage(item.id)">
             <div style="overflow:hidden;padding: 5px;">
                 <img class="cover" :src="item.cover">
@@ -103,6 +103,7 @@ export default {
     }
   },
   created(){
+    this.type = this.$attrs.type?this.$attrs.type:this.type;
     for(var i in this.$data)this.$attrs[i] = this.$attrs[i]?this.$attrs[i]:this.$data[i];
   }
 }

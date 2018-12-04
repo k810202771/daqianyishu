@@ -12,7 +12,8 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/list': {
-        target: 'http://192.168.31.2/webdemo/daqianyishu/static/php',  //目标接口域名
+        //target: 'http://dachinartcenter.com.cn/php',  //目标接口域名
+        target: 'http://192.168.31.2/webdemo/daqianyishu/static/php/',  //目标接口域名
         changeOrigin: true,  //是否跨域
         pathRewrite: {
           '^/list': '/'   //重写接口
